@@ -4,6 +4,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import mysql from 'mysql2/promise';
 import dotenv from 'dotenv';
+import fs from 'fs';
 
 dotenv.config();
 
@@ -12,7 +13,8 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 app.use(cors());
-app.use(express.json());
+app.use(express.json({ limit: '10mb' }));
+app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
 let pool;
 
@@ -67,6 +69,28 @@ initDb();
 const getUserId = (req) => req.headers['x-user-id'] || 'default';
 
 // API Routes
+app.post('/api/upload-invoice', (req, res) => {
+  try {
+    const { image } = req.body;
+    if (!image) return res.status(400).json({ error: 'No image provided' });
+    
+    const base64Data = image.replace(/^data:image\/png;base64,/, "");
+    const fileName = `invoice-${Date.now()}.png`;
+    const uploadsDir = path.join(__dirname, '../uploads');
+    
+    if (!fs.existsSync(uploadsDir)) {
+      fs.mkdirSync(uploadsDir, { recursive: true });
+    }
+    
+    fs.writeFileSync(path.join(uploadsDir, fileName), base64Data, 'base64');
+    
+    res.json({ url: `/uploads/${fileName}` });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Failed to save image' });
+  }
+});
+
 app.get('/api/expenses', async (req, res) => {
   try {
     const userId = getUserId(req);
