@@ -121,12 +121,11 @@ const formatDisplayDate = (dateStr) => {
 };
 
 const today = new Date();
-const todayDate = formatDate(today);
-// default to current month
 const firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
+const fifteenthDay = new Date(today.getFullYear(), today.getMonth(), 15);
 
 const startDate = ref(formatDate(firstDay));
-const endDate = ref(formatDate(today));
+const endDate = ref(formatDate(fifteenthDay));
 const showInvoice = ref(false);
 const generatedImage = ref(null);
 

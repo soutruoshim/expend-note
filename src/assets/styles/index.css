@@ -98,6 +98,7 @@ body {
     padding-bottom: 4px;
     justify-content: center;
     white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
 }
 
 .week-nav-container {
