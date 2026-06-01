@@ -59,6 +59,20 @@ const initDb = async () => {
     await pool.query('ALTER TABLE expenses CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;');
     await pool.query('ALTER TABLE products CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;');
 
+    // Seed default products
+    const [existingDefaults] = await pool.query('SELECT count(*) as count FROM products WHERE userId = "default"');
+    if (existingDefaults[0].count === 0) {
+      await pool.query(`
+        INSERT INTO products (userId, name, price, icon, category) VALUES
+        ('default', 'ទឹកដបតូច', 1500, '💧', 'ភេសជ្ជៈ'),
+        ('default', 'ទឹកដបធំ', 3000, '💧', 'ភេសជ្ជៈ'),
+        ('default', 'អាមេរីកាណូ', 5000, '☕', 'ភេសជ្ជៈ'),
+        ('default', 'វី-កាហ្វេ', 5000, '☕', 'ភេសជ្ជៈ'),
+        ('default', 'គ្រុឌ', 4000, '🥤', 'ភេសជ្ជៈ')
+      `);
+      console.log('Inserted default products.');
+    }
+
     console.log("Database tables initialized.");
   } catch (error) {
     console.error("Failed to initialize database:", error);
@@ -143,7 +157,7 @@ app.delete('/api/expenses/:id', async (req, res) => {
 app.get('/api/products', async (req, res) => {
   try {
     const userId = getUserId(req);
-    const [rows] = await pool.query('SELECT * FROM products WHERE userId = ?', [userId]);
+    const [rows] = await pool.query('SELECT * FROM products WHERE userId = ? OR userId = "default"', [userId]);
     res.json(rows);
   } catch (error) {
     console.error(error);

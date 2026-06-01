@@ -56,10 +56,25 @@
       :key="item.id" 
       :item="item"
       showDelete
-      @delete="tracker.deleteExpense"
+      @delete="confirmDelete"
     />
     
     <div v-if="filteredEntries.length === 0" class="empty">មិនមានការកត់ត្រា</div>
+
+    <!-- Delete Confirmation Sheet -->
+    <div v-if="deleteSheetId" class="overlay" @click.self="deleteSheetId = null">
+      <div class="sheet slide-up">
+        <div class="sheet-handle"></div>
+        <div class="sheet-title">លុបការកត់ត្រា (Delete Entry)</div>
+        <p style="text-align: center; color: #64748b; font-size: 14px; margin-bottom: 24px;">
+          តើអ្នកពិតជាចង់លុបការកត់ត្រានេះមែនទេ?
+        </p>
+        <div style="display: flex; gap: 12px;">
+          <button class="form-btn" style="flex: 1; background: rgba(255,255,255,0.6); color: #1e293b; border: 1px solid rgba(0,0,0,0.1);" @click="deleteSheetId = null">បោះបង់ (Cancel)</button>
+          <button class="form-btn" style="flex: 1; background: #ef4444; border: 1px solid #dc2626;" @click="executeDelete">លុប (Delete)</button>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -72,6 +87,7 @@ const props = defineProps({
 });
 
 const filterCat = ref('ទាំងអស់');
+const deleteSheetId = ref(null);
 
 const filterOptions = computed(() => {
   return ['ទាំងអស់', ...props.tracker.categories.value.map(x => x.name)];
@@ -82,4 +98,15 @@ const filteredEntries = computed(() => {
   if (filterCat.value === 'ទាំងអស់') return list;
   return list.filter(e => e.category === filterCat.value);
 });
+
+const confirmDelete = (id) => {
+  deleteSheetId.value = id;
+};
+
+const executeDelete = () => {
+  if (deleteSheetId.value) {
+    props.tracker.deleteExpense(deleteSheetId.value);
+    deleteSheetId.value = null;
+  }
+};
 </script>
