@@ -8,7 +8,8 @@
       "price": 5000,
       "time": "08:15 AM",
       "icon": "☕",
-      "category": "ភេសជ្ជៈ"
+      "category": "ភេសជ្ជៈ",
+      "userId": "default"
     },
     {
       "id": 2,
@@ -18,7 +19,8 @@
       "price": 2000,
       "time": "10:30 AM",
       "icon": "💧",
-      "category": "ភេសជ្ជៈ"
+      "category": "ភេសជ្ជៈ",
+      "userId": "default"
     },
     {
       "id": 3,
@@ -28,7 +30,8 @@
       "price": 5000,
       "time": "09:00 AM",
       "icon": "🥤",
-      "category": "ភេសជ្ជៈ"
+      "category": "ភេសជ្ជៈ",
+      "userId": "default"
     },
     {
       "id": 4,
@@ -38,7 +41,8 @@
       "price": 7000,
       "time": "12:30 PM",
       "icon": "🍜",
-      "category": "អាហារ"
+      "category": "អាហារ",
+      "userId": "default"
     },
     {
       "id": 5,
@@ -48,7 +52,8 @@
       "price": 5000,
       "time": "08:00 AM",
       "icon": "☕",
-      "category": "ភេសជ្ជៈ"
+      "category": "ភេសជ្ជៈ",
+      "userId": "default"
     },
     {
       "id": 6,
@@ -58,7 +63,8 @@
       "price": 3000,
       "time": "14:00 PM",
       "icon": "🌊",
-      "category": "ភេសជ្ជៈ"
+      "category": "ភេសជ្ជៈ",
+      "userId": "default"
     },
     {
       "id": 7,
@@ -68,7 +74,8 @@
       "price": 8000,
       "time": "12:00 PM",
       "icon": "🍱",
-      "category": "អាហារ"
+      "category": "អាហារ",
+      "userId": "default"
     },
     {
       "id": 8,
@@ -78,7 +85,8 @@
       "price": 5000,
       "time": "02:45 PM",
       "icon": "☕",
-      "category": "ភេសជ្ជៈ"
+      "category": "ភេសជ្ជៈ",
+      "userId": "default"
     },
     {
       "id": 9,
@@ -88,7 +96,8 @@
       "price": 3000,
       "time": "02:45 PM",
       "icon": "🌊",
-      "category": "ភេសជ្ជៈ"
+      "category": "ភេសជ្ជៈ",
+      "userId": "default"
     },
     {
       "id": 10,
@@ -98,7 +107,8 @@
       "price": 3000,
       "time": "02:47 PM",
       "icon": "🌊",
-      "category": "ភេសជ្ជៈ"
+      "category": "ភេសជ្ជៈ",
+      "userId": "default"
     },
     {
       "id": 11,
@@ -108,7 +118,8 @@
       "price": 7000,
       "time": "02:47 PM",
       "icon": "🍜",
-      "category": "អាហារ"
+      "category": "អាហារ",
+      "userId": "default"
     }
   ],
   "products": [
@@ -117,42 +128,48 @@
       "name": "កាហ្វេ",
       "price": 5000,
       "icon": "☕",
-      "category": "ភេសជ្ជៈ"
+      "category": "ភេសជ្ជៈ",
+      "userId": "default"
     },
     {
       "id": 2,
       "name": "V-Coffee",
       "price": 5000,
       "icon": "🥤",
-      "category": "ភេសជ្ជៈ"
+      "category": "ភេសជ្ជៈ",
+      "userId": "default"
     },
     {
       "id": 3,
       "name": "ទឹកតូច",
       "price": 2000,
       "icon": "💧",
-      "category": "ភេសជ្ជៈ"
+      "category": "ភេសជ្ជៈ",
+      "userId": "default"
     },
     {
       "id": 4,
       "name": "ទឹកធំ",
       "price": 3000,
       "icon": "🌊",
-      "category": "ភេសជ្ជៈ"
+      "category": "ភេសជ្ជៈ",
+      "userId": "default"
     },
     {
       "id": 5,
       "name": "បាយ",
       "price": 8000,
       "icon": "🍱",
-      "category": "អាហារ"
+      "category": "អាហារ",
+      "userId": "default"
     },
     {
       "id": 6,
       "name": "ហ្វូ",
       "price": 7000,
       "icon": "🍜",
-      "category": "អាហារ"
+      "category": "អាហារ",
+      "userId": "default"
     }
   ]
 }
