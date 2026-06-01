@@ -50,7 +50,7 @@
       <div v-show="!generatedImage" class="invoice-content" id="print-area">
         <div class="inv-header">
           <h2>វិក្កយបត្រចំណាយ (Expense Invoice)</h2>
-          <p>កាលបរិច្ឆេទ: {{ startDate }} ដល់ {{ endDate }}</p>
+          <p>កាលបរិច្ឆេទ: {{ formatDisplayDate(startDate) }} ដល់ {{ formatDisplayDate(endDate) }}</p>
         </div>
         <table class="inv-table">
           <thead>
@@ -65,7 +65,7 @@
           </thead>
           <tbody>
             <tr v-for="e in filteredEntries" :key="e.id">
-              <td>{{ e.date }}</td>
+              <td>{{ formatDisplayDate(e.date) }}</td>
               <td>{{ e.name }}</td>
               <!-- <td>{{ e.category }}</td> -->
               <td style="text-align:center">{{ e.qty }}</td>
@@ -76,6 +76,12 @@
         </table>
         <div class="inv-total">
           សរុបរួម: {{ totalSpent.toLocaleString() }} ៛
+        </div>
+        
+        <div class="qr-pay-section">
+          <p>Scan to Pay (ABA / KHQR)</p>
+          <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=your_payment_link_here" alt="QR Pay" class="qr-img"/>
+          <!-- <p style="font-size: 11px; color: #64748b; margin-top: 5px;">* Please change image source to your real QR</p> -->
         </div>
       </div>
       
@@ -106,6 +112,12 @@ const formatDate = (date) => {
   const m = String(date.getMonth() + 1).padStart(2, '0');
   const d = String(date.getDate()).padStart(2, '0');
   return `${y}-${m}-${d}`;
+};
+
+const formatDisplayDate = (dateStr) => {
+  if (!dateStr) return '';
+  const [y, m, d] = dateStr.split('-');
+  return `${d}/${m}/${y}`;
 };
 
 const today = new Date();
@@ -343,6 +355,23 @@ const downloadInvoice = async () => {
   color: #1e293b;
   border-top: 2px solid #2563eb;
   padding-top: 15px;
+}
+.qr-pay-section {
+  margin-top: 30px;
+  text-align: center;
+}
+.qr-pay-section p {
+  font-weight: bold;
+  color: #1e293b;
+  margin-bottom: 10px;
+}
+.qr-img {
+  width: 120px;
+  height: 120px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 5px;
+  background: white;
 }
 .invoice-actions {
   display: flex;
