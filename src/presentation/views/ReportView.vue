@@ -80,18 +80,21 @@
         
         <div class="qr-pay-section">
           <p>Scan to Pay (ABA / KHQR)</p>
-          <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=your_payment_link_here" alt="QR Pay" class="qr-img"/>
+          <img src="../../assets/qr-ny-mary.jpg" alt="QR Pay" class="qr-img"/>
           <!-- <p style="font-size: 11px; color: #64748b; margin-top: 5px;">* Please change image source to your real QR</p> -->
         </div>
       </div>
       
       <div v-if="generatedImage" class="image-preview">
-        <p class="preview-instruction">ចុចឲ្យជាប់លើរូបភាពខាងក្រោមដើម្បីរក្សាទុក (Long press to save)</p>
+        <p class="preview-instruction">ចុចប៊ូតុងខាងក្រោម ឬ សង្កត់លើរូបភាពដើម្បីរក្សាទុក</p>
         <img :src="generatedImage" alt="Invoice Preview" class="preview-img" />
       </div>
 
       <div class="invoice-actions no-print">
-        <button v-if="!generatedImage" @click="downloadInvoice" class="btn-print">បង្កើតរូបភាព (Create Image)</button>
+        <button v-if="!generatedImage" @click="downloadInvoice" class="btn-print" :disabled="isGenerating">
+          {{ isGenerating ? 'កំពុងបង្កើត...' : 'បង្កើតរូបភាព (Create Image)' }}
+        </button>
+        <button v-if="generatedImage" @click="shareImage" class="btn-print">ចែករំលែក (Share/Save)</button>
         <button @click="closeInvoice" class="btn-close">បិទ (Close)</button>
       </div>
     </div>
@@ -128,10 +131,13 @@ const startDate = ref(formatDate(firstDay));
 const endDate = ref(formatDate(fifteenthDay));
 const showInvoice = ref(false);
 const generatedImage = ref(null);
+const generatedFile = ref(null);
+const isGenerating = ref(false);
 
 const closeInvoice = () => {
   showInvoice.value = false;
   generatedImage.value = null;
+  generatedFile.value = null;
 };
 
 const filteredEntries = computed(() => {
@@ -201,6 +207,7 @@ const createInvoice = () => {
 const downloadInvoice = async () => {
   const element = document.getElementById('print-area');
   if (element) {
+    isGenerating.value = true;
     try {
       const canvas = await html2canvas(element, {
         scale: 2,
@@ -209,39 +216,45 @@ const downloadInvoice = async () => {
         allowTaint: true
       });
       const dataUrl = canvas.toDataURL('image/png');
-      
-      // Always display the image so user can long-press to save (safest fallback)
       generatedImage.value = dataUrl;
       
-      let shared = false;
       try {
         const blob = await (await fetch(dataUrl)).blob();
         const file = new File([blob], `invoice-${startDate.value}.png`, { type: 'image/png' });
-        
-        if (navigator.canShare && navigator.canShare({ files: [file] })) {
-          await navigator.share({
-            files: [file],
-            title: 'Invoice',
-            text: 'Here is your invoice'
-          });
-          shared = true;
-        }
+        generatedFile.value = file;
       } catch (e) {
-        console.warn('Share API not available or failed', e);
-      }
-      
-      // Fallback for Android/Desktop: Try HTML5 direct download
-      if (!shared) {
-        const link = document.createElement('a');
-        link.download = `invoice-${startDate.value}.png`;
-        link.href = dataUrl;
-        link.click();
+        console.warn('Failed to create file blob', e);
       }
       
     } catch (err) {
       console.error('Failed to generate image', err);
       alert('មានបញ្ហាក្នុងការរក្សាទុករូបភាព');
+    } finally {
+      isGenerating.value = false;
     }
+  }
+};
+
+const shareImage = async () => {
+  let shared = false;
+  if (generatedFile.value && navigator.canShare && navigator.canShare({ files: [generatedFile.value] })) {
+    try {
+      await navigator.share({
+        files: [generatedFile.value],
+        title: 'Invoice',
+        text: 'Here is your invoice'
+      });
+      shared = true;
+    } catch (e) {
+      console.warn('Share API failed', e);
+    }
+  }
+  
+  if (!shared) {
+    const link = document.createElement('a');
+    link.download = `invoice-${startDate.value}.png`;
+    link.href = generatedImage.value;
+    link.click();
   }
 };
 </script>
