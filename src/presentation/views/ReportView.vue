@@ -255,6 +255,15 @@ const shareImage = async () => {
     link.download = `invoice-${startDate.value}.png`;
     link.href = generatedImage.value;
     link.click();
+    
+    // In Android WebViews, the above click is silently blocked.
+    // We explicitly instruct the user to use the long-press fallback.
+    const isAndroid = /android/i.test(navigator.userAgent) || window.Telegram?.WebApp?.platform === 'android';
+    if (isAndroid) {
+      setTimeout(() => {
+        alert('សូមសង្កត់ឲ្យជាប់ (Long Press) លើរូបភាពខាងលើ រួចជ្រើសរើស "Save Image" ឬ "Share" ដើម្បីរក្សាទុក។');
+      }, 500);
+    }
   }
 };
 </script>
