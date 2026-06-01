@@ -201,7 +201,9 @@ const downloadInvoice = async () => {
     try {
       const canvas = await html2canvas(element, {
         scale: 2,
-        backgroundColor: '#ffffff'
+        backgroundColor: '#ffffff',
+        useCORS: true,
+        allowTaint: true
       });
       const dataUrl = canvas.toDataURL('image/png');
       
