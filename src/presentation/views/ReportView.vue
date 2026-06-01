@@ -47,7 +47,7 @@
 
     <!-- In-App Invoice Modal -->
     <div v-if="showInvoice" class="invoice-modal">
-      <div class="invoice-content" id="print-area">
+      <div v-show="!generatedImage" class="invoice-content" id="print-area">
         <div class="inv-header">
           <h2>វិក្កយបត្រចំណាយ (Expense Invoice)</h2>
           <p>កាលបរិច្ឆេទ: {{ startDate }} ដល់ {{ endDate }}</p>
@@ -79,9 +79,14 @@
         </div>
       </div>
       
+      <div v-if="generatedImage" class="image-preview">
+        <p class="preview-instruction">ចុចឲ្យជាប់លើរូបភាពខាងក្រោមដើម្បីរក្សាទុក (Long press to save)</p>
+        <img :src="generatedImage" alt="Invoice Preview" class="preview-img" />
+      </div>
+
       <div class="invoice-actions no-print">
-        <button @click="downloadInvoice" class="btn-print">រក្សាទុករូបភាព (Save Image)</button>
-        <button @click="showInvoice = false" class="btn-close">បិទ (Close)</button>
+        <button v-if="!generatedImage" @click="downloadInvoice" class="btn-print">បង្កើតរូបភាព (Create Image)</button>
+        <button @click="closeInvoice" class="btn-close">បិទ (Close)</button>
       </div>
     </div>
   </div>
@@ -111,6 +116,12 @@ const firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
 const startDate = ref(formatDate(firstDay));
 const endDate = ref(formatDate(today));
 const showInvoice = ref(false);
+const generatedImage = ref(null);
+
+const closeInvoice = () => {
+  showInvoice.value = false;
+  generatedImage.value = null;
+};
 
 const filteredEntries = computed(() => {
   return props.tracker.allEntries.value.filter(e => {
@@ -183,10 +194,24 @@ const downloadInvoice = async () => {
       });
       const dataUrl = canvas.toDataURL('image/png');
       
-      const link = document.createElement('a');
-      link.download = `invoice-${startDate.value}-to-${endDate.value}.png`;
-      link.href = dataUrl;
-      link.click();
+      try {
+        const blob = await (await fetch(dataUrl)).blob();
+        const file = new File([blob], `invoice-${startDate.value}.png`, { type: 'image/png' });
+        
+        if (navigator.canShare && navigator.canShare({ files: [file] })) {
+          await navigator.share({
+            files: [file],
+            title: 'Invoice',
+            text: 'Here is your invoice'
+          });
+          return;
+        }
+      } catch (e) {
+        console.warn('Share API not available', e);
+      }
+      
+      // Fallback: Display the image so user can long-press to save
+      generatedImage.value = dataUrl;
     } catch (err) {
       console.error('Failed to generate image', err);
       alert('មានបញ្ហាក្នុងការរក្សាទុករូបភាព');
@@ -252,6 +277,27 @@ const downloadInvoice = async () => {
   overflow-y: auto;
   display: flex;
   flex-direction: column;
+}
+.image-preview {
+  flex: 1;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow-y: auto;
+  background: #f1f5f9;
+}
+.preview-instruction {
+  font-size: 14px;
+  color: #ef4444;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 20px;
+}
+.preview-img {
+  max-width: 100%;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
 }
 .invoice-content {
   flex: 1;
