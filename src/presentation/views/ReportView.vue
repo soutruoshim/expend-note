@@ -135,9 +135,12 @@ const closeInvoice = () => {
 };
 
 const filteredEntries = computed(() => {
-  return props.tracker.allEntries.value.filter(e => {
-    return e.date >= startDate.value && e.date <= endDate.value;
-  });
+  return props.tracker.allEntries.value
+    .filter(e => e.date >= startDate.value && e.date <= endDate.value)
+    .sort((a, b) => {
+      if (a.date === b.date) return a.id - b.id;
+      return a.date.localeCompare(b.date);
+    });
 });
 
 const totalSpent = computed(() => {
