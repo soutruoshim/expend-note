@@ -218,14 +218,14 @@ const downloadInvoice = async () => {
       const dataUrl = canvas.toDataURL('image/png');
       
       try {
-        const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/api/upload-invoice`, {
+        const response = await fetch(`/api/upload-invoice`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ image: dataUrl })
         });
         const resData = await response.json();
         
-        const realUrl = (import.meta.env.VITE_API_URL || 'http://localhost:3000') + resData.url;
+        const realUrl = resData.url;
         generatedImage.value = realUrl;
         
         const blob = await (await fetch(realUrl)).blob();
