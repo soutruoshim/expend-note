@@ -1,0 +1,158 @@
+{
+  "expenses": [
+    {
+      "id": 1,
+      "date": "2026-05-29",
+      "name": "កាហ្វេ",
+      "qty": 1,
+      "price": 5000,
+      "time": "08:15 AM",
+      "icon": "☕",
+      "category": "ភេសជ្ជៈ"
+    },
+    {
+      "id": 2,
+      "date": "2026-05-29",
+      "name": "ទឹកតូច",
+      "qty": 10,
+      "price": 2000,
+      "time": "10:30 AM",
+      "icon": "💧",
+      "category": "ភេសជ្ជៈ"
+    },
+    {
+      "id": 3,
+      "date": "2026-05-28",
+      "name": "V-Coffee",
+      "qty": 2,
+      "price": 5000,
+      "time": "09:00 AM",
+      "icon": "🥤",
+      "category": "ភេសជ្ជៈ"
+    },
+    {
+      "id": 4,
+      "date": "2026-05-28",
+      "name": "ហ្វូ",
+      "qty": 1,
+      "price": 7000,
+      "time": "12:30 PM",
+      "icon": "🍜",
+      "category": "អាហារ"
+    },
+    {
+      "id": 5,
+      "date": "2026-05-27",
+      "name": "កាហ្វេ",
+      "qty": 1,
+      "price": 5000,
+      "time": "08:00 AM",
+      "icon": "☕",
+      "category": "ភេសជ្ជៈ"
+    },
+    {
+      "id": 6,
+      "date": "2026-05-26",
+      "name": "ទឹកធំ",
+      "qty": 3,
+      "price": 3000,
+      "time": "14:00 PM",
+      "icon": "🌊",
+      "category": "ភេសជ្ជៈ"
+    },
+    {
+      "id": 7,
+      "date": "2026-05-25",
+      "name": "បាយ",
+      "qty": 1,
+      "price": 8000,
+      "time": "12:00 PM",
+      "icon": "🍱",
+      "category": "អាហារ"
+    },
+    {
+      "id": 8,
+      "date": "2026-06-01",
+      "name": "កាហ្វេ",
+      "qty": 1,
+      "price": 5000,
+      "time": "02:45 PM",
+      "icon": "☕",
+      "category": "ភេសជ្ជៈ"
+    },
+    {
+      "id": 9,
+      "date": "2026-06-01",
+      "name": "ទឹកធំ",
+      "qty": 1,
+      "price": 3000,
+      "time": "02:45 PM",
+      "icon": "🌊",
+      "category": "ភេសជ្ជៈ"
+    },
+    {
+      "id": 10,
+      "date": "2026-06-01",
+      "name": "ទឹកធំ",
+      "qty": 1,
+      "price": 3000,
+      "time": "02:47 PM",
+      "icon": "🌊",
+      "category": "ភេសជ្ជៈ"
+    },
+    {
+      "id": 11,
+      "date": "2026-06-01",
+      "name": "ហ្វូ",
+      "qty": 1,
+      "price": 7000,
+      "time": "02:47 PM",
+      "icon": "🍜",
+      "category": "អាហារ"
+    }
+  ],
+  "products": [
+    {
+      "id": 1,
+      "name": "កាហ្វេ",
+      "price": 5000,
+      "icon": "☕",
+      "category": "ភេសជ្ជៈ"
+    },
+    {
+      "id": 2,
+      "name": "V-Coffee",
+      "price": 5000,
+      "icon": "🥤",
+      "category": "ភេសជ្ជៈ"
+    },
+    {
+      "id": 3,
+      "name": "ទឹកតូច",
+      "price": 2000,
+      "icon": "💧",
+      "category": "ភេសជ្ជៈ"
+    },
+    {
+      "id": 4,
+      "name": "ទឹកធំ",
+      "price": 3000,
+      "icon": "🌊",
+      "category": "ភេសជ្ជៈ"
+    },
+    {
+      "id": 5,
+      "name": "បាយ",
+      "price": 8000,
+      "icon": "🍱",
+      "category": "អាហារ"
+    },
+    {
+      "id": 6,
+      "name": "ហ្វូ",
+      "price": 7000,
+      "icon": "🍜",
+      "category": "អាហារ"
+    }
+  ]
+}
