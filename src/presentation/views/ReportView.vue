@@ -210,6 +210,10 @@ const downloadInvoice = async () => {
       });
       const dataUrl = canvas.toDataURL('image/png');
       
+      // Always display the image so user can long-press to save (safest fallback)
+      generatedImage.value = dataUrl;
+      
+      let shared = false;
       try {
         const blob = await (await fetch(dataUrl)).blob();
         const file = new File([blob], `invoice-${startDate.value}.png`, { type: 'image/png' });
@@ -220,14 +224,20 @@ const downloadInvoice = async () => {
             title: 'Invoice',
             text: 'Here is your invoice'
           });
-          return;
+          shared = true;
         }
       } catch (e) {
-        console.warn('Share API not available', e);
+        console.warn('Share API not available or failed', e);
       }
       
-      // Fallback: Display the image so user can long-press to save
-      generatedImage.value = dataUrl;
+      // Fallback for Android/Desktop: Try HTML5 direct download
+      if (!shared) {
+        const link = document.createElement('a');
+        link.download = `invoice-${startDate.value}.png`;
+        link.href = dataUrl;
+        link.click();
+      }
+      
     } catch (err) {
       console.error('Failed to generate image', err);
       alert('មានបញ្ហាក្នុងការរក្សាទុករូបភាព');
