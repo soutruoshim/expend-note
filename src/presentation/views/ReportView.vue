@@ -57,7 +57,7 @@
             <tr>
               <th>កាលបរិច្ឆេទ</th>
               <th>ឈ្មោះ</th>
-              <th>ប្រភេទ</th>
+              <!-- <th>ប្រភេទ</th> -->
               <th style="text-align:center">ចំនួន</th>
               <th style="text-align:right">តម្លៃរាយ (៛)</th>
               <th style="text-align:right">សរុប (៛)</th>
@@ -67,7 +67,7 @@
             <tr v-for="e in filteredEntries" :key="e.id">
               <td>{{ e.date }}</td>
               <td>{{ e.name }}</td>
-              <td>{{ e.category }}</td>
+              <!-- <td>{{ e.category }}</td> -->
               <td style="text-align:center">{{ e.qty }}</td>
               <td style="text-align:right">{{ e.price.toLocaleString() }}</td>
               <td style="text-align:right">{{ (e.price * e.qty).toLocaleString() }}</td>
