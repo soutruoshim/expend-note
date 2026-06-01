@@ -80,7 +80,7 @@
       </div>
       
       <div class="invoice-actions no-print">
-        <button @click="printInvoice" class="btn-print">បោះពុម្ព (Print)</button>
+        <button @click="downloadInvoice" class="btn-print">រក្សាទុករូបភាព (Save Image)</button>
         <button @click="showInvoice = false" class="btn-close">បិទ (Close)</button>
       </div>
     </div>
@@ -90,6 +90,7 @@
 <script setup>
 import { ref, computed } from 'vue';
 import EntryCard from '../components/EntryCard.vue';
+import html2canvas from 'html2canvas';
 
 const props = defineProps({
   tracker: Object
@@ -172,8 +173,25 @@ const createInvoice = () => {
   showInvoice.value = true;
 };
 
-const printInvoice = () => {
-  window.print();
+const downloadInvoice = async () => {
+  const element = document.getElementById('print-area');
+  if (element) {
+    try {
+      const canvas = await html2canvas(element, {
+        scale: 2,
+        backgroundColor: '#ffffff'
+      });
+      const dataUrl = canvas.toDataURL('image/png');
+      
+      const link = document.createElement('a');
+      link.download = `invoice-${startDate.value}-to-${endDate.value}.png`;
+      link.href = dataUrl;
+      link.click();
+    } catch (err) {
+      console.error('Failed to generate image', err);
+      alert('មានបញ្ហាក្នុងការរក្សាទុករូបភាព');
+    }
+  }
 };
 </script>
 
