@@ -44,6 +44,46 @@
       showDate
       :showQty="false"
     />
+
+    <!-- In-App Invoice Modal -->
+    <div v-if="showInvoice" class="invoice-modal">
+      <div class="invoice-content" id="print-area">
+        <div class="inv-header">
+          <h2>វិក្កយបត្រចំណាយ (Expense Invoice)</h2>
+          <p>កាលបរិច្ឆេទ: {{ startDate }} ដល់ {{ endDate }}</p>
+        </div>
+        <table class="inv-table">
+          <thead>
+            <tr>
+              <th>កាលបរិច្ឆេទ</th>
+              <th>ឈ្មោះ</th>
+              <th>ប្រភេទ</th>
+              <th style="text-align:center">ចំនួន</th>
+              <th style="text-align:right">តម្លៃរាយ (៛)</th>
+              <th style="text-align:right">សរុប (៛)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="e in filteredEntries" :key="e.id">
+              <td>{{ e.date }}</td>
+              <td>{{ e.name }}</td>
+              <td>{{ e.category }}</td>
+              <td style="text-align:center">{{ e.qty }}</td>
+              <td style="text-align:right">{{ e.price.toLocaleString() }}</td>
+              <td style="text-align:right">{{ (e.price * e.qty).toLocaleString() }}</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="inv-total">
+          សរុបរួម: {{ totalSpent.toLocaleString() }} ៛
+        </div>
+      </div>
+      
+      <div class="invoice-actions no-print">
+        <button @click="printInvoice" class="btn-print">បោះពុម្ព (Print)</button>
+        <button @click="showInvoice = false" class="btn-close">បិទ (Close)</button>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -69,6 +109,7 @@ const firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
 
 const startDate = ref(formatDate(firstDay));
 const endDate = ref(formatDate(today));
+const showInvoice = ref(false);
 
 const filteredEntries = computed(() => {
   return props.tracker.allEntries.value.filter(e => {
@@ -128,71 +169,11 @@ const chartData = computed(() => {
 });
 
 const createInvoice = () => {
-  const invoiceHtml = `
-    <html>
-      <head>
-        <title>វិក្កយបត្រចំណាយ (Expense Invoice)</title>
-        <style>
-          body { font-family: 'Noto Sans Khmer', sans-serif, Arial, sans-serif; padding: 40px; color: #333; }
-          .header { text-align: center; margin-bottom: 40px; }
-          .header h2 { margin: 0; font-size: 24px; color: #2563eb; }
-          .header p { margin: 5px 0; font-size: 14px; color: #666; }
-          table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 14px; }
-          th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
-          th { background-color: #f8fafc; color: #475569; font-weight: bold; }
-          .total { font-weight: bold; font-size: 20px; margin-top: 30px; text-align: right; color: #1e293b; border-top: 2px solid #2563eb; padding-top: 15px; }
-          @media print { body { padding: 0; } }
-        </style>
-      </head>
-      <body>
-        <div class="header">
-          <h2>វិក្កយបត្រចំណាយ (Expense Invoice)</h2>
-          <p>កាលបរិច្ឆេទ: ${startDate.value} ដល់ ${endDate.value}</p>
-        </div>
-        <table>
-          <thead>
-            <tr>
-              <th>កាលបរិច្ឆេទ</th>
-              <th>ឈ្មោះ</th>
-              <th>ប្រភេទ</th>
-              <th style="text-align:center">ចំនួន</th>
-              <th style="text-align:right">តម្លៃរាយ (៛)</th>
-              <th style="text-align:right">សរុប (៛)</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${filteredEntries.value.map(e => `
-              <tr>
-                <td>${e.date}</td>
-                <td>${e.name}</td>
-                <td>${e.category}</td>
-                <td style="text-align:center">${e.qty}</td>
-                <td style="text-align:right">${e.price.toLocaleString()}</td>
-                <td style="text-align:right">${(e.price * e.qty).toLocaleString()}</td>
-              </tr>
-            `).join('')}
-          </tbody>
-        </table>
-        <div class="total">
-          សរុបរួម: ${totalSpent.value.toLocaleString()} ៛
-        </div>
-        <script>
-          setTimeout(() => {
-            window.print();
-            window.close();
-          }, 500);
-        </sc` + `ript>
-      </body>
-    </html>
-  `;
-  
-  const printWindow = window.open('', '_blank');
-  if (printWindow) {
-    printWindow.document.write(invoiceHtml);
-    printWindow.document.close();
-  } else {
-    alert("សូមអនុញ្ញាត (allow popups) សម្រាប់គេហទំព័រនេះ ដើម្បីបង្ហាញវិក្កយបត្រ។");
-  }
+  showInvoice.value = true;
+};
+
+const printInvoice = () => {
+  window.print();
 };
 </script>
 
@@ -242,5 +223,102 @@ const createInvoice = () => {
 }
 .invoice-btn:active {
   background: #1d4ed8;
+}
+
+/* Invoice Modal Styles */
+.invoice-modal {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: white;
+  z-index: 9999;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+.invoice-content {
+  flex: 1;
+  padding: 40px 20px;
+  color: #333;
+  font-family: 'Noto Sans Khmer', sans-serif, Arial, sans-serif;
+}
+.inv-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+.inv-header h2 {
+  margin: 0;
+  font-size: 24px;
+  color: #2563eb;
+}
+.inv-header p {
+  margin: 5px 0;
+  font-size: 14px;
+  color: #666;
+}
+.inv-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  font-size: 13px;
+}
+.inv-table th, .inv-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+.inv-table th {
+  background-color: #f8fafc;
+  color: #475569;
+  font-weight: bold;
+}
+.inv-total {
+  font-weight: bold;
+  font-size: 18px;
+  margin-top: 30px;
+  text-align: right;
+  color: #1e293b;
+  border-top: 2px solid #2563eb;
+  padding-top: 15px;
+}
+.invoice-actions {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  padding: 20px;
+  background: #f8fafc;
+  border-top: 1px solid #e2e8f0;
+}
+.invoice-actions button {
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  border: none;
+  font-family: inherit;
+}
+.btn-print {
+  background: #2563eb;
+  color: white;
+}
+.btn-close {
+  background: #cbd5e1;
+  color: #1e293b;
+}
+
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  .invoice-modal, .invoice-modal * {
+    visibility: visible;
+  }
+  .invoice-modal {
+    position: absolute;
+    left: 0;
+    top: 0;
+  }
+  .no-print {
+    display: none !important;
+  }
 }
 </style>
